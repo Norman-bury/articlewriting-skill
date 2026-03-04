@@ -40,7 +40,7 @@
 |---|---|---|
 | 写作正文 | `.md` / 纯文本 / `.tex` | 便于版本管理和后续再加工 |
 | 过程记录 | `plan/*.md` | 包含目标、进度、阶段门禁、偏好和决策 |
-| 图表脚本 | `.py` | 可复现图表生成逻辑 |
+| 图表脚本 | `.py` | 可复现图表，这个需要或者自己运行，或者直接利用skill也可以帮你运行生成 |
 | 提示词资产 | `.md` | 可复用的翻译、润色、去AI化模板 |
 
 ## 重要边界（务必先看）
@@ -116,7 +116,7 @@ pandoc draft.md -o draft.docx
 | 投稿前自审 | `modules/peer-review.md` |
 | 统计分析 | `modules/statistical-analysis.md` |
 | Python 图表 | `modules/figures-python.md` |
-| 流程图/架构图 | `modules/figures-diagram.md` |
+| 流程图/架构图提示词生成 | `modules/figures-diagram.md` |
 | 环境安装与排错 | `modules/environment-setup.md` |
 | LaTeX 排版 | `modules/latex-guide.md` |
 
