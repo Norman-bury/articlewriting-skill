@@ -1,13 +1,13 @@
 # 科研写作助手 (Research Writing Assistant)
 
-把“论文写作”从一次性聊天，升级成可追踪、可恢复、可复用的工程化协作流程。  
+把“论文写作”从一次性聊天，升级成可追踪、可恢复、可复用的工程化协作流程。
 这个 Skill 面向本科生、研究生和早期科研人员，目标很直接：少走弯路，减少返工，把时间花在真正有价值的研究内容上。
 
 ![科研写作助手使用流程](assets/readme/workflow.png)
 
 ## 项目定位
 
-这不是一个“只会润色句子”的提示词包，而是一套完整的科研写作协作系统。  
+这不是一个“只会润色句子”的提示词包，而是一套完整的科研写作协作系统。
 它会在任务开始前先对齐目标与约束，自动接管 `plan/` 项目上下文，再按学科和任务路由到对应模块执行。
 
 如果你在做毕业论文、课程项目论文或投稿初稿，这个 Skill 会比普通对话式写作工具更稳定，因为它强调流程、记录和回写，不依赖单轮记忆。
@@ -36,25 +36,67 @@
 
 默认情况下，Skill 产物是项目内文件，不是 Word 成品文件。
 
-| 产物类型 | 默认格式 | 说明 |
-|---|---|---|
-| 写作正文 | `.md` / 纯文本 / `.tex` | 便于版本管理和后续再加工 |
-| 过程记录 | `plan/*.md` | 包含目标、进度、阶段门禁、偏好和决策 |
-| 图表脚本 | `.py` | 可复现图表，这个需要或者自己运行，或者直接利用skill也可以帮你运行生成 |
-| 提示词资产 | `.md` | 可复用的翻译、润色、去AI化模板 |
+| 产物类型   | 默认格式                    | 说明                                                                  |
+| ---------- | --------------------------- | --------------------------------------------------------------------- |
+| 写作正文   | `.md` / 纯文本 / `.tex` | 便于版本管理和后续再加工                                              |
+| 过程记录   | `plan/*.md`               | 包含目标、进度、阶段门禁、偏好和决策                                  |
+| 图表脚本   | `.py`                     | 可复现图表，这个需要或者自己运行，或者直接利用skill也可以帮你运行生成 |
+| 提示词资产 | `.md`                     | 可复用的翻译、润色、去AI化模板                                        |
 
 ## 重要边界（务必先看）
 
-1. Skill 默认不会自动生成或直接写入 `.docx`。  
-2. Skill 默认不会替你“打开 Word 并排版”，需要你手动复制或用工具转换。  
-3. Skill 可以生成适合粘贴进 Word 的纯文本段落，但最终样式（标题级别、页眉页脚、目录、参考文献域）需要你在 Word 端处理。  
-4. 文献不会编造，引用需可追溯；高风险结论需要二次核验，但是数据是我们说了算，实验跑不跑随便，重点是出结果。 
+1. Skill 默认不会自动生成或直接写入 `.docx`。
+2. Skill 默认不会替你“打开 Word 并排版”，需要你手动复制或用工具转换。
+3. Skill 可以生成适合粘贴进 Word 的纯文本段落，但最终样式（标题级别、页眉页脚、目录、参考文献域）需要你在 Word 端处理。
+4. 文献不会编造，引用需可追溯；高风险结论需要二次核验，但是数据是我们说了算，实验跑不跑随便，重点是出结果。
 
 ## 安装
 
+### 方式一（推荐）
+
+使用[OpenSkill](https://github.com/numman-ali/openskills),它提供一套 **通用的 Skills 加载/管理方式** ，让 Cursor, Claude Code 等 AI coding agent 可以读取并使用以 `SKILL.md` 为核心的技能包。
+
+#### 1)  前置依赖
+
+OpenSkills 通过 npm 分发，并会从 GitHub 拉取 skills 仓库，准备：
+
+* Node.js 20.6+（含 npm）
+* Git
+
+#### 2)  安装/运行 OpenSkills
+
+OpenSkills 支持直接用 `npx` 运行：
+
+```shell
+npx openskills --version
+```
+
+如需多项目复用，也可全局安装：
+
+```shell
+npm i -g openskills
+openskills --version
+```
+
+### 3)  一键安装 Skills
+
+OpenSkills 支持直接从 GitHub 仓库安装 Skills，并自动放入默认目录（一般为项目内 `./.claude/skills/`），Cursor 会自动从 `.claude/skills/`（以及 `.cursor/skills/`）发现 skills 并加载
+
+> npx openskills install Norman-bury/articlewriting-skill
+
+### 4）确认安装
+
+使用一下命令查看skill是否加载成功
+
+> npx openskills list
+
+skill名称应为*research- writing- assistant*
+
+### 方式二
+
 下载仓库，解压后把 `research-writing-skill/` 复制到你的论文写作目录就可以用了。
 
-推荐步骤：
+操作步骤：
 
 1. 下载本仓库压缩包并解压。
 2. 把 `research-writing-skill/` 文件夹复制到你的论文项目目录。
@@ -94,33 +136,28 @@ pandoc draft.md -o draft.docx
 
 ## 常用脚本
 
-- 初始化计划目录  
-  macOS/Linux: `bash research-writing-skill/scripts/init_plan.sh`  
-  Windows PowerShell: `powershell -ExecutionPolicy Bypass -File research-writing-skill/scripts/init_plan.ps1`
-
-- 去AI化与排版自检  
-  macOS/Linux: `bash research-writing-skill/scripts/style_check.sh <文件.md>`  
+- 初始化计划目录macOS/Linux: `bash research-writing-skill/scripts/init_plan.sh`Windows PowerShell: `powershell -ExecutionPolicy Bypass -File research-writing-skill/scripts/init_plan.ps1`
+- 去AI化与排版自检
+  macOS/Linux: `bash research-writing-skill/scripts/style_check.sh <文件.md>`
   Windows PowerShell: `powershell -ExecutionPolicy Bypass -File research-writing-skill/scripts/style_check.ps1 -FilePath <文件.md>`
 
 ## 模块地图
 
-| 场景 | 模块 |
-|---|---|
-| 全流程阶段推进与投稿准备 | `modules/workflow-lifecycle.md` |
-| 通用论文写作 | `modules/writing-core.md` |
-| 文科/社科写作 | `modules/writing-humanities.md` |
-| 医学/生物写作 | `modules/writing-medical.md` |
-| 法学写作 | `modules/writing-law.md` |
-| 文献综述 | `modules/literature-review.md` |
-| 翻译/润色/去AI化 | `modules/prompts-collection.md` |
-| 投稿前自审 | `modules/peer-review.md` |
-| 统计分析 | `modules/statistical-analysis.md` |
-| Python 图表 | `modules/figures-python.md` |
-| 流程图/架构图提示词生成 | `modules/figures-diagram.md` |
-| 环境安装与排错 | `modules/environment-setup.md` |
-| LaTeX 排版 | `modules/latex-guide.md` |
-
-
+| 场景                     | 模块                                |
+| ------------------------ | ----------------------------------- |
+| 全流程阶段推进与投稿准备 | `modules/workflow-lifecycle.md`   |
+| 通用论文写作             | `modules/writing-core.md`         |
+| 文科/社科写作            | `modules/writing-humanities.md`   |
+| 医学/生物写作            | `modules/writing-medical.md`      |
+| 法学写作                 | `modules/writing-law.md`          |
+| 文献综述                 | `modules/literature-review.md`    |
+| 翻译/润色/去AI化         | `modules/prompts-collection.md`   |
+| 投稿前自审               | `modules/peer-review.md`          |
+| 统计分析                 | `modules/statistical-analysis.md` |
+| Python 图表              | `modules/figures-python.md`       |
+| 流程图/架构图提示词生成  | `modules/figures-diagram.md`      |
+| 环境安装与排错           | `modules/environment-setup.md`    |
+| LaTeX 排版               | `modules/latex-guide.md`          |
 
 ## FAQ
 
@@ -177,7 +214,6 @@ research-writing-skill/
 
 - README 展示图存放在 `assets/readme/`。
 - 仓库包含 `.gitattributes`，已将 `assets/readme/**` 标记为 `export-ignore`，用于减少 Source code 压缩包中的图片体积。
-
 
 ## 版本
 
